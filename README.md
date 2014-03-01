@@ -1,4 +1,4 @@
 TinyGet
 =======
 
-TinyGet in .Net
+TinyGet is very simple console app for making GET requests.
