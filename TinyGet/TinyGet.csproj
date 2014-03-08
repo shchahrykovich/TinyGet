@@ -33,6 +33,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Moq">
+      <HintPath>..\packages\Moq.4.2.1402.2112\lib\net40\Moq.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
@@ -53,9 +56,15 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>CommandLineArguments.resx</DependentUpon>
     </Compile>
+    <Compile Include="Config\IAppArguments.cs" />
+    <Compile Include="Context.cs" />
+    <Compile Include="Requests\IRequestSender.cs" />
+    <Compile Include="Requests\IRequestSenderCreator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Config\StringExtensions.cs" />
+    <Compile Include="Requests\RequestSender.cs" />
+    <Compile Include="Requests\RequestSenderCreator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

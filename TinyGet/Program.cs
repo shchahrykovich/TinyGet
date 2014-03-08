@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.Threading;
 using TinyGet.Config;
+using TinyGet.Requests;
 
 namespace TinyGet
 {
@@ -24,7 +25,8 @@ namespace TinyGet
                     NameValueCollection settings = args.ToNameValueCollection();
                     AppArguments arguments = AppArguments.Parse(settings);
 
-                    AppHost host = new AppHost(arguments, Cancellation.Token, Console.Out);
+                    Context context = new Context(arguments, Cancellation.Token, Console.Out);
+                    AppHost host = new AppHost(context, new RequestSenderCreator());
                     host.Run();
 
                 }

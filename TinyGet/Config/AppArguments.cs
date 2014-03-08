@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace TinyGet.Config
 {
-    internal class AppArguments
+    internal class AppArguments : IAppArguments
     {
         public int Loop { get; private set; }
 

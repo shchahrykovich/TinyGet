@@ -1,24 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using TinyGet.Config;
+using TinyGet.Requests;
 
 namespace TinyGet
 {
     internal class AppHost
     {
-        public AppHost(AppArguments arguments, CancellationToken token, TextWriter output)
+        private readonly Context _context;
+        private readonly IRequestSenderCreator _requestSenderCreator;
+
+        public AppHost(Context context, IRequestSenderCreator requestSenderCreator)
         {
-            throw new NotImplementedException();
+            _context = context;
+            _requestSenderCreator = requestSenderCreator;
         }
 
         public void Run()
         {
-            throw new NotImplementedException();
+            List<IRequestSender> senders = new List<IRequestSender>();
+
+            for (int i = 0; i < _context.Arguments.Threads; i++)
+            {
+                senders.Add(_requestSenderCreator.Create(_context));
+            }
+
+            Task[] tasks = senders.Select(s => s.Run()).ToArray();
+            Task.WaitAll(tasks);
         }
     }
 }
