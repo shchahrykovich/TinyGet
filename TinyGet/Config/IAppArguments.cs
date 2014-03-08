@@ -18,5 +18,7 @@ namespace TinyGet.Config
         int Status { get; }
 
         HttpMethod Method { get; }
+
+        string GetUrl();
     }
 }

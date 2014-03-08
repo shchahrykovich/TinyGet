@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace TinyGet.Requests
@@ -15,9 +12,13 @@ namespace TinyGet.Requests
             _context = context;
         }
 
-        public Task Run()
+        public async Task Run()
         {
-            return Task.Run(() => { }, _context.Token);
+            using (HttpClient client = new HttpClient())
+            {
+                HttpRequestMessage request = new HttpRequestMessage(_context.Arguments.Method, _context.Arguments.GetUrl());
+                HttpResponseMessage result = await client.SendAsync(request, _context.Token);
+            }
         }
     }
 }
