@@ -1,4 +1,5 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace TinyGet.Requests
@@ -20,6 +21,10 @@ namespace TinyGet.Requests
                 {
                     HttpRequestMessage request = new HttpRequestMessage(_context.Arguments.Method, _context.Arguments.GetUrl());
                     HttpResponseMessage result = await client.SendAsync(request, _context.Token);
+                    if ((int)result.StatusCode != _context.Arguments.Status)
+                    {
+                        throw new ApplicationException("Status code is not equal to " + _context.Arguments.Status);
+                    }
                 }
             }
         }

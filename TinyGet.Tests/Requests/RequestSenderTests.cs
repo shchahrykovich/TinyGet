@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,6 +27,8 @@ namespace TinyGet.Tests.Requests
 
             _arguments = new Mock<IAppArguments>();
             _arguments.Setup(a => a.Method).Returns(HttpMethod.Get);
+            _arguments.Setup(a => a.Status).Returns(200);
+            _arguments.Setup(a => a.Loop).Returns(1);
 
             _tokenSource = new CancellationTokenSource();
             Context context = new Context(_arguments.Object, _tokenSource.Token, null);
@@ -46,8 +49,7 @@ namespace TinyGet.Tests.Requests
         [Test]
         public void Should_Send_Http_Request()
         {           
-            // Arrange            
-            _arguments.Setup(a => a.Loop).Returns(1);
+            // Arrange                        
             _arguments.Setup(a => a.GetUrl()).Returns(_server.HostUrl + "api/Home");
 
             // Act
@@ -63,7 +65,6 @@ namespace TinyGet.Tests.Requests
         public void Should_Cancel_Request()
         {
             // Arrange
-            _arguments.Setup(a => a.Loop).Returns(1);
             _arguments.Setup(a => a.GetUrl()).Returns(_server.HostUrl + "api/Home/long-running");
 
             // Act
@@ -73,6 +74,20 @@ namespace TinyGet.Tests.Requests
             // Assert
             Assert.Throws<AggregateException>(result.Wait);
             Assert.That(result.IsCanceled, Is.True);
+        }
+
+        [Test]
+        public void Should_Check_Status_Code()
+        {
+            // Arrange                
+            _arguments.Setup(a => a.GetUrl()).Returns(_server.HostUrl + "api/not-found");
+
+            // Act
+            Task task = _sender.Run();
+            ApplicationException result = Assert.Throws<AggregateException>(task.Wait).InnerExceptions.Single() as ApplicationException;
+
+            // Assert
+            Assert.That(result.Message, Is.EqualTo("Status code is not equal to 200"));
         }
 
         [Test]
