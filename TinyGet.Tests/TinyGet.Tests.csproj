@@ -68,6 +68,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config\AppArgumentsTests.cs" />
     <Compile Include="Controllers\RequestRecorder.cs" />
     <Compile Include="Helpers\ApiServer.cs" />
     <Compile Include="AppHostTests.cs" />
