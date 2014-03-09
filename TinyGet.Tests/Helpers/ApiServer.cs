@@ -6,6 +6,8 @@ namespace TinyGet.Tests.Helpers
 {
     internal class ApiServer : IDisposable
     {
+       //Run for CI: netsh http add urlacl url=http://+:2345/ user="Network Service"
+
         private readonly HttpSelfHostServer _server;
 
         public readonly string HostUrl;
