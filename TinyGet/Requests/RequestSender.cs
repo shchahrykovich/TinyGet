@@ -16,8 +16,11 @@ namespace TinyGet.Requests
         {
             using (HttpClient client = new HttpClient())
             {
-                HttpRequestMessage request = new HttpRequestMessage(_context.Arguments.Method, _context.Arguments.GetUrl());
-                HttpResponseMessage result = await client.SendAsync(request, _context.Token);
+                for (int i = 0; i < _context.Arguments.Loop; i++)
+                {
+                    HttpRequestMessage request = new HttpRequestMessage(_context.Arguments.Method, _context.Arguments.GetUrl());
+                    HttpResponseMessage result = await client.SendAsync(request, _context.Token);
+                }
             }
         }
     }

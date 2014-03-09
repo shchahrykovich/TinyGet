@@ -22,6 +22,8 @@ namespace TinyGet.Tests.Requests
         [SetUp]
         public void Setup()
         {
+            RequestRecorder.Reset();
+
             _arguments = new Mock<IAppArguments>();
             _arguments.Setup(a => a.Method).Returns(HttpMethod.Get);
 
@@ -45,6 +47,7 @@ namespace TinyGet.Tests.Requests
         public void Should_Send_Http_Request()
         {           
             // Arrange            
+            _arguments.Setup(a => a.Loop).Returns(1);
             _arguments.Setup(a => a.GetUrl()).Returns(_server.HostUrl + "api/Home");
 
             // Act
@@ -55,26 +58,42 @@ namespace TinyGet.Tests.Requests
             AssertSingleRequestMethod("HomeController.Get", 1);
         }
 
-        private static void AssertSingleRequestMethod(string name, int count)
-        {
-            Assert.That(RequestRecorder.GetTotal(), Is.EqualTo(count));
-            Assert.That(RequestRecorder.Get(name), Is.EqualTo(count));
-        }
-
         [Test]
-        [Timeout(2000)]
-        public void Should_Cancel_Requests()
+        [Timeout(5000)]
+        public void Should_Cancel_Request()
         {
             // Arrange
+            _arguments.Setup(a => a.Loop).Returns(1);
             _arguments.Setup(a => a.GetUrl()).Returns(_server.HostUrl + "api/Home/long-running");
 
             // Act
             _tokenSource.Cancel();
             Task result = _sender.Run();
-            
+
             // Assert
             Assert.Throws<AggregateException>(result.Wait);
             Assert.That(result.IsCanceled, Is.True);
+        }
+
+        [Test]
+        public void Should_Send_Multiple_Requests()
+        {
+            // Arrange
+            _arguments.Setup(a => a.Loop).Returns(10);
+            _arguments.Setup(a => a.GetUrl()).Returns(_server.HostUrl + "api/Home");
+
+            // Act
+            Task result = _sender.Run();
+            result.Wait();
+
+            // Assert
+            AssertSingleRequestMethod("HomeController.Get", 10);
+        }
+
+        private static void AssertSingleRequestMethod(string name, int count)
+        {
+            Assert.That(RequestRecorder.GetTotal(), Is.EqualTo(count));
+            Assert.That(RequestRecorder.Get(name), Is.EqualTo(count));
         }
     }
 }

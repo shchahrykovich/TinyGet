@@ -63,9 +63,13 @@ namespace TinyGet.Config {
         /// <summary>
         ///   Looks up a localized string similar to Usage:
         ///TinyGet.exe -srv:localhost -uri:/Default.html -threads:10 -loop:10
+        ///TinyGet.exe -srv:localhost -uri:/Default.html -threads:10 -loop:10 -port:80
+        ///TinyGet.exe -srv:localhost -uri:/Default.html -threads:10 -loop:10 -status:200
         ///
         ///-srv         --   Name of the server
         ///-uri         --   URI which should be called
+        ///-port        --   Port number
+        ///-status      --   Expected status
         ///-threads     --   Number of concurrent threads
         ///-loops       --   Number of repeats for each thread.
         /// </summary>
