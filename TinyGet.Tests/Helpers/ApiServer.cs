@@ -13,6 +13,7 @@ namespace TinyGet.Tests.Helpers
 
         public ApiServer()
         {
+            const string machineName = "localhost";
             HostUrl = string.Format("http://{0}:{1}/", Environment.MachineName, Port);
 
             HttpSelfHostConfiguration config = new HttpSelfHostConfiguration(HostUrl);
