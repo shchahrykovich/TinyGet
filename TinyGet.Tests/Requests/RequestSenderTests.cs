@@ -63,7 +63,7 @@ namespace TinyGet.Tests.Requests
 
         [Test]
         [Timeout(2000)]
-        public void Should_Return_Cancelled_Task_When_Cancel_Called()
+        public void Should_Cancel_Requests()
         {
             // Arrange
             _arguments.Setup(a => a.GetUrl()).Returns(_server.HostUrl + "api/Home/long-running");
